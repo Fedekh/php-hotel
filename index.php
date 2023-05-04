@@ -28,14 +28,14 @@ $hotels = [
     [
         'Name' => 'Hotel Bellavista',
         'Description' => 'Hotel Bellavista Descrizione',
-        'parking' => false,
+        'Parking' => false,
         'Vote' => 5,
         'Distance_to_center (km)' => 5.5
     ],
     [
         'Name' => 'Hotel Milano',
         'Description' => 'Hotel Milano Descrizione',
-        'parking' => true,
+        'Parking' => true,
         'Vote' => 2,
         'Distance_to_center (km)' => 50
     ],
@@ -43,6 +43,8 @@ $hotels = [
 ];
 
 // var_dump($hotels);           // stampo l'array di array
+
+
 ?>
 
 
@@ -67,36 +69,53 @@ $hotels = [
     <div class="wrapper container mt-5 text-center">
         <h1 class="my-5">&#128520; Hotel da incubo &#128520;</h1>
 
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <!-- scelgo di proposito il primo elemento perche le key sono uguali per tutti -->
-                    <?php foreach ($hotels[0] as $key => $hotel) { ?>
-                        <th scope="col"><?php echo $key ?></th>
-                    <?php } ?>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($hotels as $hotel) { ?>
+        <form action="index.php" method="GET"> <!-- metodo GET perche voglio che i dati siano visibili nell'url -->
+
+            <label for="parking">Filtra per parcheggio</label>
+            <select class="my-5" id="parking" name="parking">
+                <option value="">TUTTI</option>
+                <option value="withparking">Con parcheggio</option>
+                <option value="notparking">Senza parcheggio</option>
+            </select>
+
+
+            <input type="submit">
+
+            <!-- TABLE SECTION -->
+            <table class="table table-hover">
+                <thead>
                     <tr>
-                        <td><?php echo $hotel['Name']; ?></td>
-                        <td><?php echo $hotel['Description']; ?></td>
-                        <td><?php echo $hotel['Parking'] ? 'Yes' : 'No'; ?></td>
-                        <td><?php echo $hotel['Vote']; ?></td>
-                        <td><?php echo $hotel['Distance_to_center (km)']; ?></td>
+                        <!-- scelgo di proposito il primo elemento perche le key sono uguali per tutti -->
+                        <?php foreach ($hotels[0] as $key => $hotel) { ?>
+                            <th scope="col"><?php echo $key ?></th>
+                        <?php } ?>
                     </tr>
-                <?php } ?>
-               
-            </tbody>
-        </table>
-        <!-- <select name="" id="">
-            <option value=""></option>
-            <option value=""></option>
-        </select>
-        <select name="" id="">
-            <option value=""></option>
-            <option value=""></option>
-        </select> -->
+                </thead>
+                <tbody>
+                    <?php
+                    if (isset($_GET["parking"])) {
+                        $filter_parking = $_GET['parking'];       // prendo il valore del select
+                    } else {
+                        $filter_parking = "";
+                    }
+                    ?>
+                    <?php foreach ($hotels as $hotel) {         
+                        if ($filter_parking === "" || ($filter_parking === "withparking" && $hotel['Parking'] === true) || ($filter_parking === "notparking" && $hotel['Parking'] === false)) {     // se il valore del select è vuoto oppure se il valore del select è con parcheggio e l'hotel ha il parcheggio oppure se il valore del select è senza parcheggio e l'hotel non ha il parcheggio
+                    ?>
+                            <tr>
+                                <td><?php echo $hotel['Name']; ?></td>
+                                <td><?php echo $hotel['Description']; ?></td>
+                                <td><?php echo $hotel['Parking'] ? 'Yes' : 'No'; ?></td>
+                                <td><?php echo $hotel['Vote']; ?></td>
+                                <td><?php echo $hotel['Distance_to_center (km)']; ?></td>
+                            </tr>
+                        <?php } ?>
+                    <?php } ?>
+
+                </tbody>
+            </table>
+        </form>
+
     </div>
 
 </body>
