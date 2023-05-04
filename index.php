@@ -9,44 +9,50 @@ $hotels = [
         'Description' => 'Hotel Belvedere Descrizione',
         'Parking' => true,
         'Vote' => 4,
-        'Distance_to_center (km)' => 10.4
+        'Distanza dal centro (KM)' => 10.4
     ],
     [
         'Name' => 'Hotel Futuro',
         'Description' => 'Hotel Futuro Descrizione',
         'Parking' => true,
         'Vote' => 2,
-        'Distance_to_center (km)' => 2
+        'Distanza dal centro (KM)' => 2
     ],
     [
         'Name' => 'Hotel Rivamare',
         'Description' => 'Hotel Rivamare Descrizione',
-        'parking' => false,
+        'Parking' => false,
         'Vote' => 1,
-        'Distance_to_center (km)' => 1
+        'Distanza dal centro (KM)' => 1
     ],
     [
         'Name' => 'Hotel Bellavista',
         'Description' => 'Hotel Bellavista Descrizione',
         'Parking' => false,
         'Vote' => 5,
-        'Distance_to_center (km)' => 5.5
+        'Distanza dal centro (KM)' => 5.5
     ],
     [
         'Name' => 'Hotel Milano',
         'Description' => 'Hotel Milano Descrizione',
         'Parking' => true,
         'Vote' => 2,
-        'Distance_to_center (km)' => 50
+        'Distanza dal centro (KM)' => 50
     ],
 
 ];
 
-// var_dump($hotels);           // stampo l'array di array
-
+// creo un array di array per creare le option del select vote PER CREARMI DIFFICOLTA
+$options = [
+    '0',            
+    '1',
+    '2',
+    '3',
+    '4',
+    '5'
+]
 
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -71,15 +77,32 @@ $hotels = [
 
         <form action="index.php" method="GET"> <!-- metodo GET perche voglio che i dati siano visibili nell'url -->
 
-            <label for="parking">Filtra per parcheggio</label>
+
+            <!-- SELECT PARKING SECTION -->
+
+            <label class="m-4" for="parking">Filtra per parcheggio</label>
             <select class="my-5" id="parking" name="parking">
                 <option value="">TUTTI</option>
                 <option value="withparking">Con parcheggio</option>
                 <option value="notparking">Senza parcheggio</option>
             </select>
 
+            <!-- SELECT VOTE SECTION -->
+            <!-- Mi sono complicato la vita creando questo select tramite ciclo foreach -->
+            <label class="m-4" for="vote">Filtra per voto</label>
+            <select name="vote" id="vote">
+                <option value="">TUTTI</option>
+                <?php
+                foreach ($options as $value) {
+                    echo "<option value='$value'>$value</option>";
+                }
+                ?>
+            </select>
 
-            <input type="submit">
+
+            <button class="btn m-4 btn-success" type="submit">CERCA</button>
+            <button class="btn m-4 btn-success" onclick="reset()" >RESET</button>
+
 
             <!-- TABLE SECTION -->
             <table class="table table-hover">
@@ -93,21 +116,25 @@ $hotels = [
                 </thead>
                 <tbody>
                     <?php
-                    if (isset($_GET["parking"])) {
-                        $filter_parking = $_GET['parking'];       // prendo il valore del select
+                    if (isset($_GET["parking"]) && isset($_GET["vote"])) {
+                        $filter_parking = $_GET['parking'];    // prendo il valore del select parking
+                        $filter_vote = $_GET['vote'];      // prendo il valore del select vote
                     } else {
                         $filter_parking = "";
+                        $filter_vote = "";
                     }
+                    echo $filter_;
                     ?>
-                    <?php foreach ($hotels as $hotel) {         
-                        if ($filter_parking === "" || ($filter_parking === "withparking" && $hotel['Parking'] === true) || ($filter_parking === "notparking" && $hotel['Parking'] === false)) {     // se il valore del select è vuoto oppure se il valore del select è con parcheggio e l'hotel ha il parcheggio oppure se il valore del select è senza parcheggio e l'hotel non ha il parcheggio
+                    
+                    <?php foreach ($hotels as $hotel) { 
+                        if (($filter_parking === "" || ($filter_parking === "withparking" && $hotel['Parking'] === true) || ($filter_parking === "notparking" && $hotel['Parking'] === false)) && ($filter_vote === "" || $hotel['Vote'] == $options[$filter_vote])) { 
                     ?>
                             <tr>
                                 <td><?php echo $hotel['Name']; ?></td>
                                 <td><?php echo $hotel['Description']; ?></td>
                                 <td><?php echo $hotel['Parking'] ? 'Yes' : 'No'; ?></td>
                                 <td><?php echo $hotel['Vote']; ?></td>
-                                <td><?php echo $hotel['Distance_to_center (km)']; ?></td>
+                                <td><?php echo $hotel['Distanza dal centro (KM)']; ?></td>
                             </tr>
                         <?php } ?>
                     <?php } ?>
@@ -117,6 +144,13 @@ $hotels = [
         </form>
 
     </div>
+    <script>
+        function reset() {  // Funzione che mostra un alert e poi dopo 2 secondi ti riporta alla pagina iniziale
+            setInterval(function() {
+                window.location.href = "./";
+            }, 1000);
+        }
+    </script>
 
 </body>
 
