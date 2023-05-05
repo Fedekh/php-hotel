@@ -2,8 +2,10 @@ body {
     background-color: rgb(152, 156, 158);
 }
 
-/* .wrapper{
-    background-color: rgb(56, 75, 85);
-    
-} */
+.wrapper{
+    background-color: rgba(88, 174, 220, 0.57);
+}
 
+h1,thead{
+    color: red;
+}

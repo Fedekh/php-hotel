@@ -44,7 +44,7 @@ $hotels = [
 
 // creo un array di array per creare le option del select vote PER CREARMI DIFFICOLTA
 $options = [
-    '0',            
+    '0',
     '1',
     '2',
     '3',
@@ -72,7 +72,7 @@ $options = [
 </head>
 
 <body>
-    <div class="wrapper container mt-5 text-center">
+    <div class="wrapper container rounded p-4 mt-5 text-center">
         <h1 class="my-5">&#128520; Hotel da incubo &#128520;</h1>
 
         <form action="index.php" method="GET"> <!-- metodo GET perche voglio che i dati siano visibili nell'url -->
@@ -99,14 +99,14 @@ $options = [
                 ?>
             </select>
 
-
             <button class="btn m-4 btn-success" type="submit">CERCA</button>
-            <button class="btn m-4 btn-success" onclick="reset()" >RESET</button>
+            <button class="btn m-4 btn-success" onclick="reset()">RESET</button>
+        </form>
 
 
             <!-- TABLE SECTION -->
-            <table class="table table-hover">
-                <thead>
+            <table class="table table-hover rounded">
+                <thead class="t-head">
                     <tr>
                         <!-- scelgo di proposito il primo elemento perche le key sono uguali per tutti -->
                         <?php foreach ($hotels[0] as $key => $hotel) { ?>
@@ -123,11 +123,11 @@ $options = [
                         $filter_parking = "";
                         $filter_vote = "";
                     }
-                    echo $filter_;
-                    ?>
                     
-                    <?php foreach ($hotels as $hotel) { 
-                        if (($filter_parking === "" || ($filter_parking === "withparking" && $hotel['Parking'] === true) || ($filter_parking === "notparking" && $hotel['Parking'] === false)) && ($filter_vote === "" || $hotel['Vote'] == $options[$filter_vote])) { 
+                    ?>
+
+                    <?php foreach ($hotels as $hotel) {
+                        if (($filter_parking === "" || ($filter_parking === "withparking" && $hotel['Parking'] === true) || ($filter_parking === "notparking" && $hotel['Parking'] === false)) && ($filter_vote === "" || $hotel['Vote'] >= $options[$filter_vote])) {
                     ?>
                             <tr>
                                 <td><?php echo $hotel['Name']; ?></td>
@@ -141,11 +141,11 @@ $options = [
 
                 </tbody>
             </table>
-        </form>
 
     </div>
+
     <script>
-        function reset() {  // Funzione che mostra un alert e poi dopo 2 secondi ti riporta alla pagina iniziale
+        function reset() { // Funzione che ti riporta alla pagina iniziale
             setInterval(function() {
                 window.location.href = "./";
             }, 1000);
